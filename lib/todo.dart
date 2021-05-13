@@ -19,15 +19,12 @@ class Todo {
     if (colorTag == GREEN_COLOR){
       return Colors.green[700];
     }
-    else if (colorTag == ORANGE_COLOR){
+    else if (colorTag == Todo.ORANGE_COLOR){
       return Colors.orange[600];
     }
     else if (colorTag == BLUE_COLOR){
-      return Colors.blueAccent[900];
+      return Colors.blue[900];
     }
-    else{
-      return Colors.yellow;
-    }
+    return Colors.orange;
   }
-
 }

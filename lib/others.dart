@@ -51,7 +51,6 @@ class DetailPageAppBar extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
         height: 56.0, // in logical pixels
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: BoxDecoration(color: Colors.blue[500]),
         // Row is a horizontal, linear layout.
         child: Row(
@@ -63,7 +62,7 @@ class DetailPageAppBar extends StatelessWidget{
                 color: Colors.white,
               ),
               tooltip: 'Back',
-              onPressed: null,
+              onPressed: () => Navigator.pushReplacementNamed(context, '/'),
             ),
             Expanded(
               child: Text(

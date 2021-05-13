@@ -8,6 +8,7 @@ class TodoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
           child: Row(
@@ -18,7 +19,11 @@ class TodoCard extends StatelessWidget {
                   children: <Widget> [
                     Row(
                       children: <Widget> [
-                        Checkbox(value: todo.isFinalized, onChanged: null),
+                        Checkbox(
+                            value: todo.isFinalized,
+                            onChanged: null,
+                            activeColor: Colors.orange[400],
+                        ),
                         Text(
                           todo.name,
                           style: TextStyle(
@@ -39,6 +44,11 @@ class TodoCard extends StatelessWidget {
                   ],
                 ),
               ),
+            Container(
+              height: 50,
+              width: 8.0,
+              color: todo.getColor(),
+            ),
             ],
           ),
         )
