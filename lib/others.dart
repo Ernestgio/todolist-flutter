@@ -44,36 +44,3 @@ class HomePageAppBar extends StatelessWidget {
     );
   }
 }
-
-class DetailPageAppBar extends StatelessWidget{
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 56.0, // in logical pixels
-        decoration: BoxDecoration(color: Colors.blue[500]),
-        // Row is a horizontal, linear layout.
-        child: Row(
-          // <Widget> is the type of items in the list.
-          children: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              tooltip: 'Back',
-              onPressed: () => Navigator.pushReplacementNamed(context, '/'),
-            ),
-            Expanded(
-              child: Text(
-                  'New',
-                  style: Theme.of(context) //
-                      .primaryTextTheme
-                      .headline6
-              ),
-            ),
-          ],
-        )
-    );
-  }
-}

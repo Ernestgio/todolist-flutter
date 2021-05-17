@@ -1,55 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/database_helper.dart';
 import 'package:todolist/todo.dart';
 
 class TodoCard extends StatelessWidget {
   final Todo todo;
-  TodoCard({this.todo});
+  final Function updateTodos;
+  TodoCard({this.todo, this.updateTodos});
 
   @override
   Widget build(BuildContext context) {
     return Card(
         clipBehavior: Clip.antiAlias,
         child: Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget> [
-                    Row(
-                      children: <Widget> [
-                        Checkbox(
-                            value: todo.isFinalized,
-                            onChanged: null,
-                            activeColor: Colors.orange[400],
-                        ),
-                        Text(
-                          todo.name,
-                          style: TextStyle(
-                            fontSize: 18,
-                            decoration: todo.isFinalized ? TextDecoration.lineThrough : null,
+          padding: EdgeInsets.all(8.0),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget> [
+                      Row(
+                        children: <Widget> [
+                          Checkbox(
+                              value: todo.isFinalized == 1,
+                              onChanged: (value) {
+                                todo.isFinalized = value ? 1 : 0;
+                                DatabaseHelper.instance.updateTodo(todo);
+                                updateTodos();
+                              },
+                              activeColor: Colors.orange[400],
                           ),
-                        )
-                      ],
-                    ),
-                    Text(todo.description),
-                    Text(
-                      "${todo.todoDate}  ${todo.todoTime}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
+                          Text(
+                            todo.name,
+                            style: TextStyle(
+                              fontSize: 18,
+                              decoration: todo.isFinalized == 1 ? TextDecoration.lineThrough : null,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                      Text(todo.description),
+                      Text(
+                        "${todo.todoDate}  ${todo.todoTime}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+              Container(
+                width: 8.0,
+                color: todo.getColor(),
               ),
-            Container(
-              height: 50,
-              width: 8.0,
-              color: todo.getColor(),
+              ],
             ),
-            ],
           ),
         )
     );
