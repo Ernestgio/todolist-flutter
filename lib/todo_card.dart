@@ -28,7 +28,7 @@ class TodoCard extends StatelessWidget {
                               onChanged: (value) {
                                 todo.isFinalized = value ? 1 : 0;
                                 DatabaseHelper.instance.updateTodo(todo);
-                                updateTodos();
+                                updateTodos(false);
                               },
                               activeColor: Colors.orange[400],
                           ),

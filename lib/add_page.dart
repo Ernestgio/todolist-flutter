@@ -57,8 +57,7 @@ class _AddPageState extends State<AddPage> {
       );
       
       DatabaseHelper.instance.insertTodo(newTodo);
-      widget.updateTodos();
-
+      widget.updateTodos(false);
     }
     Navigator.pop(context);
   }
@@ -113,6 +112,49 @@ class _AddPageState extends State<AddPage> {
                             fontSize: 18.0
                           ),
                         ),
+                        SizedBox(width: 80.0,),
+                        DropdownButton(
+                            value: _colorTag,
+                            onChanged: (value){
+                              setState(() {
+                                _colorTag = value;
+                              });
+                            },
+                            items: [
+                              DropdownMenuItem(
+                                  child: Container(
+                                    width: 100.0,
+                                    height: 10.0,
+                                    color: Colors.green[700],
+                                  ),
+                                  value: Todo.GREEN_COLOR,
+                              ),
+                              DropdownMenuItem(
+                                child: Container(
+                                  width: 100.0,
+                                  height: 10.0,
+                                  color: Colors.orange[600],
+                                ),
+                                value: Todo.ORANGE_COLOR,
+                              ),
+                              DropdownMenuItem(
+                                child: Container(
+                                  width: 100.0,
+                                  height: 10.0,
+                                  color: Colors.blue[900],
+                                ),
+                                value: Todo.BLUE_COLOR,
+                              ),
+                              DropdownMenuItem(
+                                child: Container(
+                                  width: 100.0,
+                                  height: 10.0,
+                                  color: Colors.yellow,
+                                ),
+                                value: Todo.YELLOW_COLOR,
+                              )
+                            ],
+                        )
                       ],
                     ),
                     Form(
@@ -182,9 +224,9 @@ class _AddPageState extends State<AddPage> {
             )
         ),
     floatingActionButton: FloatingActionButton(
-      backgroundColor: Colors.orange[400],
-      onPressed: () => _submit(),
-      child: Icon(Icons.check)
+        backgroundColor: Colors.orange[400],
+        onPressed: () => _submit(),
+        child: Icon(Icons.check)
     ),
     ),
     );

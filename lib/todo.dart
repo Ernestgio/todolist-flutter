@@ -27,7 +27,7 @@ class Todo {
     else if (colorTag == BLUE_COLOR){
       return Colors.blue[900];
     }
-    return Colors.orange;
+    return Colors.yellow;
   }
 
   Map<String,dynamic> toMap(){

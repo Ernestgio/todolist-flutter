@@ -14,16 +14,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   Future<List<Todo>> _displayedTodos;
+  bool isDoneFilterOn;
+
+  Widget appBarTitle;
+  IconData appBarSearchIcon;
 
   @override
   void initState(){
     super.initState();
-    _updateTodoList();
+    _updateTodoList(false);
+    appBarSearchIcon = Icons.search;
+    appBarTitle = Text('Things to do');
+    isDoneFilterOn = false;
   }
 
-  _updateTodoList() {
+  _updateTodoList(statusFilter) {
+    if(statusFilter){
+      setState(() {
+        _displayedTodos = DatabaseHelper.instance.getDoneTodoList();
+      });
+    }
+    else{
+      setState(() {
+        _displayedTodos = DatabaseHelper.instance.getTodoList();
+      });
+    }
+  }
+
+  _searchTodoList(queryString){
     setState(() {
-      _displayedTodos = DatabaseHelper.instance.getTodoList();
+      _displayedTodos = DatabaseHelper.instance.searchTodoList(queryString);
+      appBarSearchIcon = Icons.search;
+      appBarTitle = Text('Things to do');
     });
   }
 
@@ -32,7 +54,76 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Things To Do'),
+        title: appBarTitle,
+        actions: [
+          IconButton(
+              icon: Icon(
+                appBarSearchIcon,
+                color: Colors.white,
+              ),
+              tooltip: 'Search',
+              onPressed: (){
+                if (appBarSearchIcon == Icons.search) {
+                  setState(() {
+                    appBarSearchIcon = Icons.close;
+                    appBarTitle = TextField(
+                      cursorColor: Colors.white,
+                      decoration: InputDecoration(
+                        hintText: "Search todos",
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(4.0),
+                      ),
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      onSubmitted: (searchKey){
+                        _searchTodoList(searchKey);
+                      },
+                    );
+                  });
+                }
+                else{
+                  setState(() {
+                    appBarSearchIcon = Icons.search;
+                    appBarTitle = Text('Things to do');
+                  });
+                }
+
+              },
+          ),
+          PopupMenuButton(
+            icon: Icon(
+              IconData(
+                  0xe9fe,
+                  fontFamily: 'MaterialIcons',
+                  matchTextDirection: true
+              ),
+              color: Colors.white,
+
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Row(
+                  children: [
+                    Expanded(child: Text('Status')),
+                    Checkbox(value: isDoneFilterOn, onChanged: (newValue){
+                      setState(() {
+                        isDoneFilterOn = newValue;
+                      });
+                      _updateTodoList(isDoneFilterOn);
+                    })
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                child: Text('Date'),
+              ),
+              PopupMenuItem(
+                child: Text('Priority'),
+              ),
+            ],
+          )
+        ],
       ),
         body: SafeArea(
           child: FutureBuilder<List<Todo>>(

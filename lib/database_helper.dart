@@ -59,6 +59,31 @@ class DatabaseHelper {
     return todoList;
   }
 
+  Future<List<Todo>> searchTodoList(queryString) async {
+    Database db = await this.db;
+
+    final List<Map<String,dynamic>> result = await db.query('$todoTable', where: "$colName LIKE ?", whereArgs: ['%$queryString%']);
+    final List<Todo> todoList = [];
+
+    result.forEach((todoMap) {
+      todoList.add(Todo.fromMap(todoMap));
+    });
+
+    return todoList;
+}
+
+  Future<List<Todo>> getDoneTodoList() async {
+    final List<Map<String, dynamic>> todoMapList = await getTodoMapList();
+    final List<Todo> todoList = [];
+
+    todoMapList.forEach((todoMap) {
+          if(todoMap['is_finalized'] == 1){
+            todoList.add(Todo.fromMap(todoMap));
+          }
+    });
+    return todoList;
+  }
+
   Future<int> insertTodo(Todo todo) async {
     Database db = await this.db;
     final int result = await db.insert(todoTable, todo.toMap());
