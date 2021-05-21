@@ -79,7 +79,10 @@ class _AddPageState extends State<AddPage> {
               color: Colors.white,
             ),
             tooltip: 'Back',
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              widget.updateTodos(false);
+              Navigator.pop(context);
+            }
           ),
           title: Text(
               'New',

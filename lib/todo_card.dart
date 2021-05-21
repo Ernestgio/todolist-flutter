@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/database_helper.dart';
 import 'package:todolist/todo.dart';
+import 'package:intl/intl.dart';
 
 class TodoCard extends StatelessWidget {
   final Todo todo;
   final Function updateTodos;
   TodoCard({this.todo, this.updateTodos});
+  final DateFormat _dateFormatter = DateFormat('dd MMM yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class TodoCard extends StatelessWidget {
                       ),
                       Text(todo.description),
                       Text(
-                        "${todo.todoDate}  ${todo.todoTime}",
+                        "${_dateFormatter.format((todo.todoDate))}  ${todo.todoTime}",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
