@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todolist/database_helper.dart';
 import 'package:todolist/todo.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AddPage extends StatefulWidget {
   final Function updateTodos;
@@ -23,8 +24,10 @@ class _AddPageState extends State<AddPage> {
   String _todoTime = '';
 
   final DateFormat _dateFormatter = DateFormat('dd MMM yyyy');
+  final DateFormat _timeFormatter = DateFormat('hh:mm a');
 
   TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
 
   _handleDatePicker() async {
     final DateTime date = await showDatePicker(
@@ -40,6 +43,16 @@ class _AddPageState extends State<AddPage> {
       });
     }
     _dateController.text = _dateFormatter.format(_todoDate);
+  }
+
+
+
+  _selectTime() async {
+    DateTime chosen = await DatePicker.showTime12hPicker(context,
+        showTitleActions: true,
+        currentTime: DateTime.now(), locale: LocaleType.en);
+    if(chosen != null) setState(() => _todoTime = _timeFormatter.format(chosen));
+    _timeController.text = (_todoTime);
   }
 
 
@@ -198,9 +211,8 @@ class _AddPageState extends State<AddPage> {
                                         isDense: true,
                                         contentPadding: EdgeInsets.all(4.0)
                                     ),
-                                    validator: (input) => input.trim().isEmpty ? 'Please enter todo time' : null,
-                                    onSaved: (input) => _todoTime = input,
-                                    initialValue: _todoTime,
+                                    onTap: _selectTime,
+                                    controller: _timeController,
                                   ),
                               )
                             ],
