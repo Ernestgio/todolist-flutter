@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todolist/api/local_auth.dart';
 import 'package:todolist/database_helper.dart';
 import 'package:todolist/todo.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:local_auth/local_auth.dart';
+
+import 'dart:async';
+import 'package:flutter/services.dart';
+
 
 class AddPage extends StatefulWidget {
   final Function updateTodos;
@@ -22,6 +28,11 @@ class _AddPageState extends State<AddPage> {
   DateTime _todoDate = DateTime.now();
   int _colorTag = 1;
   String _todoTime = '';
+
+  final LocalAuthentication auth = LocalAuthentication();
+  _SupportState _supportState = _SupportState.unknown;
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
 
   final DateFormat _dateFormatter = DateFormat('dd MMM yyyy');
   final DateFormat _timeFormatter = DateFormat('hh:mm a');
@@ -45,8 +56,6 @@ class _AddPageState extends State<AddPage> {
     _dateController.text = _dateFormatter.format(_todoDate);
   }
 
-
-
   _selectTime() async {
     DateTime chosen = await DatePicker.showTime12hPicker(context,
         showTitleActions: true,
@@ -54,7 +63,6 @@ class _AddPageState extends State<AddPage> {
     if(chosen != null) setState(() => _todoTime = _timeFormatter.format(chosen));
     _timeController.text = (_todoTime);
   }
-
 
   _submit() {
     if(_formKey.currentState.validate()) {
@@ -240,7 +248,12 @@ class _AddPageState extends State<AddPage> {
         ),
     floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange[400],
-        onPressed: () => _submit(),
+        onPressed: () async {
+          final isAuthenticated = await BiomAuthentication.authenticate();
+          if (isAuthenticated){
+            _submit();
+          }
+        },
         child: Icon(Icons.check)
     ),
     ),
@@ -248,3 +261,8 @@ class _AddPageState extends State<AddPage> {
   }
 }
 
+enum _SupportState {
+  unknown,
+  supported,
+  unsupported,
+}
