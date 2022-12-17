@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/others.dart';
 import 'package:todolist/todo.dart';
 import 'package:todolist/todo_card.dart';
 import 'package:todolist/database_helper.dart';
